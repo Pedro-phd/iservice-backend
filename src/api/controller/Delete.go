@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +10,6 @@ import (
 func (sc *sellerController) Delete(c *gin.Context) {
 
 	id, ok := c.Params.Get("id")
-
-	fmt.Println(id)
 	if !ok {
 		c.JSON(http.StatusBadRequest, "id is necessary")
 	}

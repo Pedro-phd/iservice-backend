@@ -8,7 +8,7 @@ import (
 
 type ISellerRepository interface {
 	GetAll() ([]dto.SellerResponseDTO, *rest_err.RestErr)
-	// getByID(string) models.Seller
+	GetByEmail(string) (dto.SellerResponseDTO, *rest_err.RestErr)
 	Create(models.Seller) (string, *rest_err.RestErr)
 	Remove(string) bool
 }
