@@ -9,11 +9,12 @@ import (
 	rest_err "github.com/pedro-phd/iservice-backend/src/domain/error"
 	"github.com/pedro-phd/iservice-backend/src/infra/db"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (sc *SellerRepository) GetByEmail(email string) (dto.SellerResponseDTO, *rest_err.RestErr) {
-	journey := "SellerRepository GETBYPARAM"
-	logger.Info("Init GetByParam seller", journey)
+func (sc *SellerRepository) GetById(id string) (dto.SellerResponseDTO, *rest_err.RestErr) {
+	journey := "SellerRepository-getById"
+	logger.Info("Init GetById seller", journey)
 
 	db, errConection := db.NewMongoDBConnection(context.Background())
 	logger.Info("Database Connected", journey)
@@ -28,11 +29,8 @@ func (sc *SellerRepository) GetByEmail(email string) (dto.SellerResponseDTO, *re
 
 	temp := &dto.SellerMongoDTO{}
 
-	err := collection.FindOne(context.Background(), bson.D{{"email", email}}).Decode(temp)
-
-	if err != nil {
-		return dto.SellerResponseDTO{}, rest_err.NewBadRequestError(err.Error())
-	}
+	idPrimitive, _ := primitive.ObjectIDFromHex(id)
+	err := collection.FindOne(context.Background(), bson.D{{"_id", idPrimitive}}).Decode(temp)
 
 	var prodsDTO []dto.ProductResponseDTO
 
@@ -56,6 +54,10 @@ func (sc *SellerRepository) GetByEmail(email string) (dto.SellerResponseDTO, *re
 		Products:  prodsDTO,
 		CreatedAt: temp.CreatedAt,
 		UpdatedAt: temp.UpdatedAt,
+	}
+
+	if err != nil {
+		return dto.SellerResponseDTO{}, rest_err.NewBadRequestError(err.Error())
 	}
 
 	return *response, nil

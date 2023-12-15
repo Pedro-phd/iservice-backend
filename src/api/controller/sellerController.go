@@ -10,6 +10,7 @@ type SellerController interface {
 	Create(c *gin.Context)
 	Delete(c *gin.Context)
 	GetByEmail(c *gin.Context)
+	GetById(c *gin.Context)
 }
 
 type sellerController struct {
