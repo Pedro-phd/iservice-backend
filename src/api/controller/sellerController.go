@@ -8,6 +8,7 @@ import (
 type SellerController interface {
 	GetAll(c *gin.Context)
 	Create(c *gin.Context)
+	Delete(c *gin.Context)
 }
 
 type sellerController struct {

@@ -8,6 +8,7 @@ import (
 	"github.com/pedro-phd/iservice-backend/src/api"
 	"github.com/pedro-phd/iservice-backend/src/api/controller"
 	"github.com/pedro-phd/iservice-backend/src/configuration/logger"
+	"github.com/pedro-phd/iservice-backend/src/infra/db"
 	sellerrepository "github.com/pedro-phd/iservice-backend/src/infra/repository/sellerRepository"
 )
 
@@ -24,6 +25,8 @@ func main() {
 	logger.Info("Init dependency", "main")
 	sellerRepository := sellerrepository.NewSellerRepository()
 	sellerController := controller.NewSellercontroller(sellerRepository)
+
+	db.InitDbConfig()
 
 	//init controller
 

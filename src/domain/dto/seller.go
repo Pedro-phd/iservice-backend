@@ -1,6 +1,8 @@
 package dto
 
 import (
+	"time"
+
 	"github.com/pedro-phd/iservice-backend/src/domain/models"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -13,11 +15,13 @@ type SellerRequestDTO struct {
 }
 
 type SellerResponseDTO struct {
-	ID       primitive.ObjectID   `json:"id"`
-	Name     string               `json:"name"`
-	Email    string               `json:"email"`
-	password string               `json:"password"`
-	Products []ProductResponseDTO `json:"products"`
+	ID        primitive.ObjectID   `json:"id"`
+	Name      string               `json:"name"`
+	Email     string               `json:"email"`
+	password  string               `json:"password"`
+	Products  []ProductResponseDTO `json:"products"`
+	CreatedAt time.Time            `json:"created_at"`
+	UpdatedAt time.Time            `json:"updated_at"`
 }
 
 func NewSellerMongoDTO(name, email, password string, products []models.Product) SellerMongoDTO {
@@ -42,9 +46,11 @@ func NewMongoToSeller(name, email, password string, products []models.Product) m
 }
 
 type SellerMongoDTO struct {
-	ID       primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Name     string             `bson:"name" json:"name"`
-	Email    string             `bson:"email" json:"email"`
-	Password string             `bson:"password" json:"password"`
-	Products []ProductMongoDTO  `bson:"products" json:"products"`
+	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Name      string             `bson:"name" json:"name"`
+	Email     string             `bson:"email" json:"email"`
+	Password  string             `bson:"password" json:"password"`
+	Products  []ProductMongoDTO  `bson:"products" json:"products"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
 }

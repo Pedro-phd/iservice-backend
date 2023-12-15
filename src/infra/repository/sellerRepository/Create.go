@@ -3,6 +3,7 @@ package sellerrepository
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/pedro-phd/iservice-backend/src/configuration/logger"
 	"github.com/pedro-phd/iservice-backend/src/domain/dto"
@@ -29,12 +30,15 @@ func (sr *SellerRepository) Create(seller models.Seller) (string, *rest_err.Rest
 	logger.Info("Collection Connected", journey)
 
 	sellerToMongo := dto.NewSellerMongoDTO(seller.GetName(), seller.GetEmail(), seller.GetPassword(), seller.GetProducts())
+	sellerToMongo.CreatedAt = time.Now()
 
 	result, err := collection.InsertOne(context.Background(), sellerToMongo)
 
 	if err != nil {
 		return "", rest_err.NewBadRequestError(err.Error())
 	}
+
+	defer db.Client().Disconnect(context.Background())
 
 	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 

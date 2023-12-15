@@ -10,7 +10,7 @@ type ISellerRepository interface {
 	GetAll() ([]dto.SellerResponseDTO, *rest_err.RestErr)
 	// getByID(string) models.Seller
 	Create(models.Seller) (string, *rest_err.RestErr)
-	// remove(string) bool
+	Remove(string) bool
 }
 
 type SellerRepository struct{}

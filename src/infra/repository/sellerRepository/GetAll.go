@@ -2,8 +2,6 @@ package sellerrepository
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/pedro-phd/iservice-backend/src/configuration/logger"
@@ -29,7 +27,7 @@ func (sr *SellerRepository) GetAll() ([]dto.SellerResponseDTO, *rest_err.RestErr
 	collection := db.Collection("seller")
 	logger.Info("Collection Connected", journey)
 
-	var results []dto.SellerMongoDTO
+	// var results []dto.SellerMongoDTO
 	cursor, err := collection.Find(context.Background(), bson.D{{}})
 
 	if err != nil {
@@ -40,24 +38,44 @@ func (sr *SellerRepository) GetAll() ([]dto.SellerResponseDTO, *rest_err.RestErr
 
 	logger.Info("Data Collected", journey)
 
-	if errCursor := cursor.All(context.Background(), &results); errCursor != nil {
-		logger.Error("Error to iterate data", journey, errCursor)
-		return nil, rest_err.NewBadRequestError(errCursor.Error())
+	var sellerData []dto.SellerMongoDTO
+
+	if err := cursor.All(context.Background(), &sellerData); err != nil {
+		logger.Error("Error to iterate data", journey, err)
+		return nil, rest_err.NewBadRequestError(err.Error())
 	}
 
-	var response []dto.SellerResponseDTO
-	for _, seller := range results {
-		cursor.Decode(&seller)
-		out, err := json.Marshal(seller)
-		if err != nil {
-			logger.Error("Error to marshal", journey, err)
-			return nil, rest_err.NewBadRequestError(err.Error())
+	var result []dto.SellerResponseDTO
+
+	for _, seller := range sellerData {
+
+		prodsResponse := make([]dto.ProductResponseDTO, 0)
+
+		for _, prod := range seller.Products {
+			temp := dto.ProductResponseDTO{
+				Name:        prod.Name,
+				Price:       prod.Price,
+				Description: prod.Description,
+				Thumb:       prod.Thumb,
+				CreatedAt:   prod.CreatedAt,
+				UpdatedAt:   prod.UpdatedAt,
+			}
+			prodsResponse = append(prodsResponse, temp)
 		}
-		fmt.Printf("%s\n", out)
-		var res dto.SellerResponseDTO
-		json.Unmarshal(out, &res)
-		response = append(response, res)
+
+		temp := dto.SellerResponseDTO{
+			ID:        seller.ID,
+			Name:      seller.Name,
+			Email:     seller.Email,
+			Products:  prodsResponse,
+			CreatedAt: seller.CreatedAt,
+			UpdatedAt: seller.UpdatedAt,
+		}
+		result = append(result, temp)
 	}
 
-	return response, nil
+	logger.Info("Data Converted", journey)
+
+	defer db.Client().Disconnect(context.Background())
+	return result, nil
 }

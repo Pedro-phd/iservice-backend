@@ -8,4 +8,5 @@ import (
 func InitRoutesSeller(r *gin.RouterGroup, controller controller.SellerController) {
 	r.GET("/seller/all", controller.GetAll)
 	r.POST("/seller/", controller.Create)
+	r.DELETE("/seller/:id", controller.Delete)
 }
