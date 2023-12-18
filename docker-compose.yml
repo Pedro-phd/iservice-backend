@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: iservice
+      MONGO_INITDB_ROOT_PASSWORD: iservice
+      MONGO_INITDB_DATABASE: iservice
+    volumes:
+      - /data/db:/data/db
+    ports:
+      - 27017:27017
+
+  postgres_database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: iservice
+      POSTGRES_PASSWORD: ebb07bc8d559330f1a6bb55520561b07
+      POSTGRES_DB: iservice
+    volumes:
+      - /data/postgres:/data/postgres
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

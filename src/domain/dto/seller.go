@@ -1,56 +1,36 @@
 package dto
 
 import (
-	"time"
-
 	"github.com/pedro-phd/iservice-backend/src/domain/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type SellerRequestDTO struct {
-	Name     string           `json:"name" binding:"required,min=3,max=255"`
-	Email    string           `json:"email" binding:"required,email"`
-	Password string           `json:"password" binding:"required,min=8,max=64,containsany=!@#%$_."`
-	Products []models.Product `json:"products"`
+type SellerRequest struct {
+	Name       string `json:"name,omitempty" db:"Name"`
+	Email      string `json:"email,omitempty" db:"Email"`
+	Document   string `json:"document,omitempty" db:"Document"`
+	Phone      string `json:"phone,omitempty" db:"Phone"`
+	Password   string `json:"password,omitempty" db:"Password"`
+	Image      string `json:"image,omitempty" db:"Image"`
+	State      string `json:"state,omitempty" db:"State"`
+	City       string `json:"city,omitempty" db:"City"`
+	Street     string `json:"street,omitempty" db:"Street"`
+	Number     string `json:"number,omitempty" db:"Number"`
+	Active     bool   `json:"active,omitempty" db:"Active"`
+	Categories []int64
 }
 
-type SellerResponseDTO struct {
-	ID        primitive.ObjectID   `json:"id"`
-	Name      string               `json:"name"`
-	Email     string               `json:"email"`
-	password  string               `json:"password"`
-	Products  []ProductResponseDTO `json:"products"`
-	CreatedAt time.Time            `json:"created_at"`
-	UpdatedAt time.Time            `json:"updated_at"`
-}
-
-func NewSellerMongoDTO(name, email, password string, products []models.Product) SellerMongoDTO {
-
-	prodDTO := make([]ProductMongoDTO, 0)
-
-	for _, prod := range products {
-		temp := NewProductToMongo(prod.GetName(), prod.GetPrice(), prod.GetDescription(), prod.GetThumb())
-		prodDTO = append(prodDTO, temp)
+func MapRequestToSeller(sr SellerRequest) models.Seller {
+	return models.Seller{
+		Name:     sr.Name,
+		Email:    sr.Email,
+		Document: sr.Document,
+		Phone:    sr.Phone,
+		Password: sr.Password,
+		Image:    sr.Image,
+		State:    sr.State,
+		City:     sr.City,
+		Street:   sr.Street,
+		Number:   sr.Number,
+		Active:   sr.Active,
 	}
-
-	return SellerMongoDTO{
-		Name:     name,
-		Email:    email,
-		Password: password,
-		Products: prodDTO,
-	}
-}
-
-func NewMongoToSeller(name, email, password string, products []models.Product) models.Seller {
-	return models.NewSeller(name, email, password, products)
-}
-
-type SellerMongoDTO struct {
-	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Name      string             `bson:"name" json:"name"`
-	Email     string             `bson:"email" json:"email"`
-	Password  string             `bson:"password" json:"password"`
-	Products  []ProductMongoDTO  `bson:"products" json:"products"`
-	CreatedAt time.Time          `bson:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at"`
 }

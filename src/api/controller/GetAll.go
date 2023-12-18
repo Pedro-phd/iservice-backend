@@ -7,11 +7,11 @@ import (
 )
 
 func (sc *sellerController) GetAll(c *gin.Context) {
-	response, err := sc.SellerRepository.GetAll()
+	// response, err := sc.SellerRepository.GetAll()
 
-	if err != nil {
-		c.JSON(err.Code, err)
-		return
-	}
-	c.JSON(http.StatusOK, response)
+	// if err != nil {
+	// 	c.JSON(err.Code, err)
+	// 	return
+	// }
+	c.JSON(http.StatusOK, nil)
 }

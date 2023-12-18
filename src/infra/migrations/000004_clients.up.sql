@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS clients (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  email TEXT NOT NULL UNIQUE,
+  document TEXT NOT NULL UNIQUE,
+  phone TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  image TEXT NOT NULL,
+  state TEXT NOT NULL,
+  city TEXT NOT NULL,
+  street TEXT NOT NULL,
+  number TEXT NOT NULL,
+  active BOOLEAN NOT NULL
+);
