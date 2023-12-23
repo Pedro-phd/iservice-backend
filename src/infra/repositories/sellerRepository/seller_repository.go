@@ -7,9 +7,9 @@ import (
 
 type ISellerRepository interface {
 	Create(sellerRequest *dto.SellerRequest) (string, error)
-	// FindById(sellerId int) (*models.Seller, error)
-	// FindAll() ([]*models.Seller, error)
-	// Update(seller models.Seller) error
+	FindById(sellerId string) (dto.SellerResponse, error)
+	FindAll() ([]dto.SellerResponse, error)
+	Update(id int64, seller *dto.SellerRequest) error
 	Delete(sellerId int) error
 }
 

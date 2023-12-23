@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS sellers_categories(
   id SERIAL PRIMARY KEY,
-  seller_id INT NOT NULL REFERENCES sellers(id),
-  category_id  INT NOT NULL REFERENCES categories(id)
+  seller_id INT NOT NULL REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  category_id  INT NOT NULL REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
